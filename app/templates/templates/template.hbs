@@ -1,0 +1,17 @@
+{{outlet}}
+<p>id: {{model.id}}</p>
+<p>Name: {{model.name}}</p>
+<p>Type: {{model.type}}</p>
+<p>Sections:</p>
+<ul>
+  {{#each model.sections as |section|}}
+    <li>
+      {{section.label}}
+      <ul>
+        {{#each section.items as |item|}}
+          <li>{{item.label}}</li>
+        {{/each}}
+      </ul>
+    </li>
+  {{/each}}
+</ul>
