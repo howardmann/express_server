@@ -18,6 +18,12 @@ export default DS.RESTSerializer.extend(DS.EmbeddedRecordsMixin, {
               .filter((item) => item.parent_id === section.item_id)
               .map((item) => {
                 item.id = item.item_id;
+                item.subitems = payload.items
+                  .filter(el => el.parent_id === item.item_id)
+                  .map(el => {
+                    el.id = el.item_id;
+                    return el;
+                  })
                 return item;
               })
             return section;
@@ -25,7 +31,6 @@ export default DS.RESTSerializer.extend(DS.EmbeddedRecordsMixin, {
       }
     }
 
-    debugger;
 
     return this._super(store, primaryModelClass, payload, id, requestType);
   }

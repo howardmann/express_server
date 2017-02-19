@@ -9,7 +9,14 @@
       {{section.label}}
       <ul>
         {{#each section.items as |item|}}
-          <li>{{item.label}} | Type: {{item.type}}</li>
+          <li>
+            {{item.label}} | Type: {{item.type}}
+            <ul>
+              {{#each item.subitems as |item|}}
+              <li>{{item.label}} | Type: {{item.type}}</li>
+              {{/each}}
+            </ul>
+          </li>
         {{/each}}
       </ul>
     </li>
