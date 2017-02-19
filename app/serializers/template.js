@@ -5,32 +5,28 @@ export default DS.RESTSerializer.extend(DS.EmbeddedRecordsMixin, {
     sections: {embedded: 'always'}
   },
   normalizeResponse (store, primaryModelClass, payload, id, requestType){
-    let newPayload = {
+    payload = {
       templates: {
         id: payload.id,
         name: payload.name,
         type: payload.type,
-        sections: payload.items.filter(function(item){
-          return item.type === "section";
-        })
-
+        sections: payload.items
+          .filter(item => item.type === "section")
+          .map((section) => {
+            section.id = section.item_id;
+            section.items = payload.items
+              .filter((item) => item.parent_id === section.item_id)
+              .map((item) => {
+                item.id = item.item_id;
+                return item;
+              })
+            return section;
+          })
       }
     }
-    // Iterate through sections array and add property (forEach does not return so we do this after)
-    newPayload.templates.sections.forEach(function(item){
-      item.id = item.item_id;
-      item.items = payload.items.filter(function(el){
-        return el.parent_id === item.item_id;
-      });
-    });
 
-    newPayload.templates.sections.forEach(function(section){
-      section.items.forEach(function(item){
-        return item.id = item.item_id;
-      })
-    });
+    debugger;
 
-
-    return this._super(store, primaryModelClass, newPayload, id, requestType);
+    return this._super(store, primaryModelClass, payload, id, requestType);
   }
 });
