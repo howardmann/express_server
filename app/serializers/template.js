@@ -9,6 +9,7 @@ export default DS.RESTSerializer.extend(DS.EmbeddedRecordsMixin, {
       templates: {
         id: payload.id,
         name: payload.name,
+        description: payload.template_data.metadata.description,
         type: payload.type,
         sections: payload.items
           .filter(item => item.type === "section")
